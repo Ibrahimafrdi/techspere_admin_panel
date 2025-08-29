@@ -96,7 +96,7 @@ class FoodDetailsProvider extends BaseViewModal {
         uiSettings: [
           WebUiSettings(
             context: context,
-            presentStyle: WebPresentStyle.dialog,
+            presentStyle: WebPresentStyle.page,
             size: CropperSize(
               width: 520,
               height: 520,
@@ -141,7 +141,7 @@ class FoodDetailsProvider extends BaseViewModal {
         uiSettings: [
           WebUiSettings(
             context: context,
-            presentStyle: WebPresentStyle.dialog,
+            presentStyle: WebPresentStyle.page,
             size: CropperSize(
               width: 520,
               height: 520,
@@ -211,13 +211,13 @@ class FoodDetailsProvider extends BaseViewModal {
     notifyListeners();
   }
 
-  addAddon(Addon addon) {
-    selectedAddons.add(addon);
+  addSpec(Map<String, String> spec) {
+    item.technicalSpecs!.addAll(spec);
     notifyListeners();
   }
 
-  removeAddon(Addon addon) {
-    selectedAddons.remove(addon);
+  removeSpec(String key) {
+    item.technicalSpecs!.remove(key);
     notifyListeners();
   }
 }

@@ -28,11 +28,11 @@ class NavigationSideBar extends StatelessWidget {
                 .contains(provider.routes[index]),
             onTap: () {
               if (index == 1 ||
-                  index == 6 ||
-                  index == 8 ||
-                  index == 11 ||
-                  index == 15 ||
-                  index == 18) {
+                  index == 5 ||
+                  index == 7 ||
+                  index == 10 ||
+                  index == 14 ||
+                  index == 17) {
               } else {
                 provider.toggleScreen(index);
               }

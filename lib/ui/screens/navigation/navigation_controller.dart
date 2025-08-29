@@ -70,7 +70,6 @@ class NavigationController extends ChangeNotifier {
     '/items',
     '/categories',
     '/foods',
-    '/addons',
     '/shipping',
     '/orders',
     '/online-orders',
