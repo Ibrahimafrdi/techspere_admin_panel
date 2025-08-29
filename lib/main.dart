@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        title: 'Kabir\'s Admin Panel',
+        title: 'TechSpere\'s Admin Panel',
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'package:kabir_admin_panel/core/data_providers/addons_provider.dart';
 import 'package:kabir_admin_panel/core/models/action.dart';
 import 'package:kabir_admin_panel/core/models/variation.dart';
 import 'package:kabir_admin_panel/ui/routing/app_router.dart';
-import 'package:kabir_admin_panel/ui/screens/addons/addon_edit_dialog.dart';
 import 'package:kabir_admin_panel/ui/screens/categories/category_edit_dialog.dart';
 import 'package:kabir_admin_panel/ui/widgets/common/data_grid/data_grid.dart';
 import 'package:web/web.dart' as web;
@@ -795,12 +794,12 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                           AddButton(
                             text: 'Add New Addon',
                             onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AddonEditDialog();
-                                },
-                              );
+                              // showDialog(
+                              //   context: context,
+                              //   builder: (BuildContext context) {
+                              //     return AddonEditDialog();
+                              //   },
+                              // );
                             },
                           ),
                         ],

@@ -21,7 +21,7 @@ class NavigationScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         centerTitle: false,
         title: Image.asset(
-          'assets/images/kabir_logo.png',
+          'assets/images/techspere.png',
           scale: 8,
         ),
         actions: [

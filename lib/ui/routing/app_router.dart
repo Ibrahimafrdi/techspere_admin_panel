@@ -8,7 +8,6 @@ import 'package:kabir_admin_panel/ui/screens/navigation/navigation_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/dashboard/dashboard_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/categories/categories_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/foods/foods_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/addons/addons_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/orders/order_details_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/orders/orders_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/push_notifications/push_notifications_screen.dart';
@@ -61,11 +60,11 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-        GoRoute(
-          path: '/addons',
-          pageBuilder: (context, state) =>
-              _professionalTransition(AddonsScreen(), state),
-        ),
+        // GoRoute(
+        //   path: '/addons',
+        //   pageBuilder: (context, state) =>
+        //       _professionalTransition(AddonsScreen(), state),
+        // ),
         GoRoute(
             path: '/online-orders',
             pageBuilder: (context, state) =>
