@@ -25,19 +25,12 @@ class NavigationController extends ChangeNotifier {
     'Dashboard',
     'ITEMS',
     'Categories',
-    'Items',    
+    'Items',
     'Shipping',
     'ORDERS',
     'Online Orders',
-    'COMMUNICATIONS',
-    'Messages',
-    'USERS',
-    'Riders',
     'REPORTS',
     'Sales Report',
-    'Items Report',
-    'SETUP',
-    'Settings ',
   ];
 
   List<IconData?> icons = [
@@ -49,14 +42,7 @@ class NavigationController extends ChangeNotifier {
     null,
     Icons.install_mobile_outlined,
     null,
-    Icons.message_outlined,
-    null,
-    Icons.delivery_dining_outlined,
-    null,
     Icons.bar_chart_outlined,
-    Icons.pie_chart_outline,
-    null,
-    Icons.settings,
   ];
 
   List<String> routes = [
@@ -67,15 +53,8 @@ class NavigationController extends ChangeNotifier {
     '/shipping',
     '/orders',
     '/online-orders',
-    '/communications',
-    '/messages',
-    '/users',
-    '/riders',
     '/reports',
     '/sales-report',
-    '/items-report',
-    '/setup',
-    '/settings',
   ];
 
   void toggleScreen(int index) {

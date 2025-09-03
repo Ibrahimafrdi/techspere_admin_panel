@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kabir_admin_panel/core/constants/string_constants.dart';
 import 'package:kabir_admin_panel/core/data_providers/orders_provider.dart';
 import 'package:kabir_admin_panel/core/extensions/style.dart';
-import 'package:kabir_admin_panel/core/models/action.dart';
-import 'package:kabir_admin_panel/ui/routing/app_router.dart';
 import 'package:kabir_admin_panel/ui/widgets/common/data_grid/data_grid.dart';
 import 'package:kabir_admin_panel/ui/widgets/common/data_grid/header/outlined_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/decorations.dart';
 
-class OrdersScreen extends StatelessWidget {
-  const OrdersScreen({super.key});
+class SalesReportScreen extends StatelessWidget {
+  const SalesReportScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class OrdersScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  'Orders'.customText(
+                  'Sales Report'.customText(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
                     color: Colors.black45,
@@ -40,27 +39,29 @@ class OrdersScreen extends StatelessWidget {
               child: DataGrid(
                 columnNames: [
                   'order id',
-                  'customer',
-                  'amount',
-                  'status',
-                  'action',
+                  'date',
+                  'total',
+                  'discount',
+                  'delivery charge',
+                  'payment status',
                 ],
                 records: ordersProvider.orders
                     .map(
                       (order) => [
                         order.id,
-                        order.userName,
-                        order.total.toString(),
-                        order.status,
-                        [
-                          ActionModel(
-                            text: onlyViewActionString,
-                            onTap: () {
-                              appRouter.go('/online-orders/view',
-                                  extra: order.id);
-                            },
-                          ),
-                        ]
+                        order.createdAt != null
+                            ? DateFormat('yyyy-MM-dd').format(order.createdAt!)
+                            : 'N/A',
+                        order.total != null
+                            ? '\$${order.total!.toStringAsFixed(2)}'
+                            : 'N/A',
+                        order.discount != null
+                            ? '\$${order.discount!.toStringAsFixed(2)}'
+                            : 'N/A',
+                        order.deliveryCharges != null
+                            ? '\$${order.deliveryCharges!.toStringAsFixed(2)}'
+                            : 'N/A',
+                        'Paid',
                       ],
                     )
                     .toList(),

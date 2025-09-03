@@ -142,11 +142,6 @@ class FoodScreenHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              BorderedButton(text: 'Filter'),
-              SizedBox(width: 10),
-              BorderedButton(text: 'Import'),
-              SizedBox(width: 10),
-              BorderedButton(text: 'Export'),
               SizedBox(width: 10),
               AddButton(
                 text: 'Add Item',

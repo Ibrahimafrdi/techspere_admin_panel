@@ -38,15 +38,6 @@ class CategoriesScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      BorderedButton(
-                        text: 'Import',
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      BorderedButton(
-                        text: 'Export',
-                      ),
                       SizedBox(
                         width: 10,
                       ),

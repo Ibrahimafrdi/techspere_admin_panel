@@ -1,7 +1,13 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kabir_admin_panel/core/models/item.dart';
+import 'package:kabir_admin_panel/core/services/auth_services.dart';
+import 'package:kabir_admin_panel/locator.dart';
 import 'package:kabir_admin_panel/ui/routing/404_screen.dart';
+import 'package:kabir_admin_panel/ui/screens/auth/signin_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/items_details/items_details_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/items/items.dart';
 import 'package:kabir_admin_panel/ui/screens/navigation/navigation_screen.dart';
@@ -9,17 +15,37 @@ import 'package:kabir_admin_panel/ui/screens/dashboard/dashboard_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/categories/categories_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/orders/order_details_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/orders/orders_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/messages/messages_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/administrators/administrators_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/riders/riders_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/items_report/items_report_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/sales_report/sales_repor_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/settings/settings_screen.dart';
+import 'package:kabir_admin_panel/ui/screens/sales_report/sales_report_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/shipping/shipping_screen.dart';
 // Import other screen files as needed
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/dashboard',
+  debugLogDiagnostics: true,
+
+  // Redirect logic based on authentication state
+  redirect: (BuildContext context, GoRouterState state) async {
+    final authService = locator<AuthService>();
+    final isSignedIn = authService.isSignedIn;
+    final isSigningIn = state.matchedLocation == '/signin';
+
+    // If not signed in and not on sign-in page, redirect to sign-in
+    if (!isSignedIn && !isSigningIn) {
+      return '/signin';
+    }
+
+    // If signed in and on sign-in page, redirect to dashboard
+    if (isSignedIn && isSigningIn) {
+      return '/dashboard';
+    }
+
+    // No redirect needed
+    return null;
+  },
+
+  // Listen to auth state changes for automatic navigation
+  refreshListenable: AuthChangeNotifier(),
+
   routes: [
     ShellRoute(
       builder: (context, state, child) {
@@ -30,6 +56,11 @@ final GoRouter appRouter = GoRouter(
           path: '/dashboard',
           pageBuilder: (context, state) =>
               _professionalTransition(DashboardScreen(), state),
+        ),
+        GoRoute(
+          path: '/signin',
+          pageBuilder: (context, state) =>
+              _professionalTransition(AdminSignInScreen(), state),
         ),
         GoRoute(
           path: '/categories',
@@ -70,31 +101,13 @@ final GoRouter appRouter = GoRouter(
                 ),
               ),
             ]),
-        GoRoute(
-          path: '/messages',
-          pageBuilder: (context, state) =>
-              _professionalTransition(MessagesScreen(), state),
-        ),
-        GoRoute(
-          path: '/riders',
-          pageBuilder: (context, state) =>
-              _professionalTransition(RidersScreen(), state),
-        ),
+
         GoRoute(
           path: '/sales-report',
           pageBuilder: (context, state) =>
               _professionalTransition(SalesReportScreen(), state),
         ),
-        GoRoute(
-          path: '/items-report',
-          pageBuilder: (context, state) =>
-              _professionalTransition(ItemsReportScreen(), state),
-        ),
-        GoRoute(
-          path: '/settings',
-          pageBuilder: (context, state) =>
-              _professionalTransition(SettingsScreen(), state),
-        ),
+
         GoRoute(
           path: '/shipping',
           builder: (context, state) => const ShippingScreen(),
@@ -108,6 +121,31 @@ final GoRouter appRouter = GoRouter(
           _professionalTransition(NotFoundScreen(), state),
     ),
   ],
+  // Error handling
+  errorBuilder: (context, state) => Scaffold(
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Colors.red,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Page not found: ${state.matchedLocation}',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => context.go('/dashboard'),
+            child: const Text('Go to Dashboard'),
+          ),
+        ],
+      ),
+    ),
+  ),
 );
 Page<dynamic> _professionalTransition(Widget child, GoRouterState state) {
   return CustomTransitionPage<void>(
@@ -132,4 +170,34 @@ Page<dynamic> _professionalTransition(Widget child, GoRouterState state) {
     transitionDuration: const Duration(milliseconds: 300),
     reverseTransitionDuration: const Duration(milliseconds: 300),
   );
+}
+
+// Custom ChangeNotifier to listen to auth state changes
+class AuthChangeNotifier extends ChangeNotifier {
+  AuthChangeNotifier() {
+    // Listen to auth state changes and notify GoRouter to refresh
+    locator<AuthService>().authStateChanges.listen((_) {
+      notifyListeners();
+    });
+  }
+}
+
+// Alternative approach using Listenable for more control
+class AuthStateListener extends ChangeNotifier {
+  final AuthService _authService = locator<AuthService>();
+  late final StreamSubscription _subscription;
+
+  AuthStateListener() {
+    _subscription = _authService.authStateChanges.listen(_onAuthStateChanged);
+  }
+
+  void _onAuthStateChanged(User? user) {
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 }

@@ -7,6 +7,7 @@ import 'package:kabir_admin_panel/core/data_providers/items_provider.dart';
 import 'package:kabir_admin_panel/core/data_providers/orders_provider.dart';
 import 'package:kabir_admin_panel/core/data_providers/riders_provider.dart';
 import 'package:kabir_admin_panel/firebase_options.dart';
+import 'package:kabir_admin_panel/locator.dart';
 import 'package:kabir_admin_panel/ui/routing/app_router.dart';
 import 'package:kabir_admin_panel/core/constants/colors.dart';
 import 'package:kabir_admin_panel/ui/screens/navigation/navigation_controller.dart';
@@ -19,6 +20,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setupServiceLocator();
   runApp(const MyApp());
 }
 

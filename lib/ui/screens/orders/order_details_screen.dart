@@ -96,50 +96,6 @@ class OrderDetailsScreen extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            Text(order.riderId ?? 'Select Delivery Boy'),
-                            Icon(Icons.arrow_drop_down),
-                          ],
-                        ),
-                      ),
-                      itemBuilder: (context) => [
-                        ...ridersProvider.riders.map((rider) => PopupMenuItem(
-                                  value: rider.id,
-                                  child: Text(rider.name ?? ''),
-                                )) ??
-                            [],
-                      ],
-                      onSelected: (String riderId) async {
-                        try {
-                          await FirebaseFirestore.instance
-                              .collection('orders')
-                              .doc(order.id)
-                              .update({'riderId': riderId});
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text('Delivery boy assigned successfully'),
-                            ),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('Failed to assign delivery boy')));
-                        }
-                      },
-                    ),
-                    SizedBox(width: 12),
-                    PopupMenuButton<String>(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Row(
-                          children: [
                             Text(order.status ?? 'Pending'),
                             Icon(Icons.arrow_drop_down),
                           ],
@@ -245,7 +201,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: SizedBox(
-                   // height: double.infinity,
+                    // height: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -257,12 +213,14 @@ class OrderDetailsScreen extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              _buildSummaryRow('Subtotal', '\$${order.subtotal}'),
-                              _buildSummaryRow('Discount', '\$${order.discount}'),
                               _buildSummaryRow(
-                                  'Delivery Charge', '\$${order.deliveryCharges}',
+                                  'Subtotal', '\$${order.subtotal}'),
+                              _buildSummaryRow(
+                                  'Discount', '\$${order.discount}'),
+                              _buildSummaryRow('Delivery Charge',
+                                  '\$${order.deliveryCharges}',
                                   valueColor: Colors.green),
-                            //  Divider(height: 32),
+                              //  Divider(height: 32),
                               _buildSummaryRow('Total', '\$${order.total}',
                                   isBold: true),
                             ],
