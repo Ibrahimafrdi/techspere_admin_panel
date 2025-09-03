@@ -12,8 +12,8 @@ import '../../../core/data_providers/items_provider.dart';
 import '../../widgets/common/data_grid/header/add_button.dart';
 import '../../widgets/common/data_grid/header/outlined_button.dart';
 
-class FoodScreen extends StatelessWidget {
-  const FoodScreen({super.key});
+class ItemScreen extends StatelessWidget {
+  const ItemScreen({super.key});
 
   static const List<String> _columnNames = [
     'name',
@@ -53,7 +53,7 @@ class FoodScreen extends StatelessWidget {
                             ActionModel(
                               text: onlyEditActionString,
                               onTap: () {
-                                appRouter.go('/foods/edit', extra: item);
+                                appRouter.go('/item/edit', extra: item);
                               },
                             ),
                             ActionModel(
@@ -149,9 +149,9 @@ class FoodScreenHeader extends StatelessWidget {
               BorderedButton(text: 'Export'),
               SizedBox(width: 10),
               AddButton(
-                text: 'Add Food',
+                text: 'Add Item',
                 onTap: () {
-                  appRouter.go('/foods/add');
+                  appRouter.go('/item/add');
                 },
               ),
             ],

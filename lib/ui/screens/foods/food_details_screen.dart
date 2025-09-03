@@ -14,7 +14,7 @@ import 'package:kabir_admin_panel/core/constants/string_constants.dart';
 import 'package:kabir_admin_panel/core/data_providers/categories_provider.dart';
 import 'package:kabir_admin_panel/core/extensions/style.dart';
 import 'package:kabir_admin_panel/core/models/item.dart';
-import 'package:kabir_admin_panel/ui/screens/foods/food_details_provider.dart';
+import 'package:kabir_admin_panel/ui/screens/items/items_details_provider.dart';
 import 'package:kabir_admin_panel/ui/widgets/common/custom_radio.dart';
 import 'package:kabir_admin_panel/ui/widgets/common/data_grid/header/add_button.dart';
 import 'package:provider/provider.dart';
@@ -476,7 +476,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                   },
                 )
               : Image.asset(
-                  'assets/images/item.png',
+                  'assets/images/smaartphones.jpg',
                   fit: BoxFit.cover,
                 ),
         ),

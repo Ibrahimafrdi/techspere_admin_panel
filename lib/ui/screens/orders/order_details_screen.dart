@@ -25,7 +25,7 @@ class OrderDetailsScreen extends StatelessWidget {
         children: [
           // Order Header
           Container(
-            padding: EdgeInsets.all(24),
+            padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
@@ -202,7 +202,7 @@ class OrderDetailsScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 24),
+          SizedBox(height: 4),
 
           // Main content
           Expanded(
@@ -243,48 +243,52 @@ class OrderDetailsScreen extends StatelessWidget {
                 SizedBox(width: 24),
                 // Right side - Summary and delivery info
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
+                  flex: 3,
+                  child: SizedBox(
+                   // height: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            children: [
+                              _buildSummaryRow('Subtotal', '\$${order.subtotal}'),
+                              _buildSummaryRow('Discount', '\$${order.discount}'),
+                              _buildSummaryRow(
+                                  'Delivery Charge', '\$${order.deliveryCharges}',
+                                  valueColor: Colors.green),
+                            //  Divider(height: 32),
+                              _buildSummaryRow('Total', '\$${order.total}',
+                                  isBold: true),
+                            ],
+                          ),
                         ),
-                        child: Column(
-                          children: [
-                            _buildSummaryRow('Subtotal', '\$${order.subtotal}'),
-                            _buildSummaryRow('Discount', '\$${order.discount}'),
-                            _buildSummaryRow(
-                                'Delivery Charge', '\$${order.deliveryCharges}',
-                                valueColor: Colors.green),
-                            Divider(height: 32),
-                            _buildSummaryRow('Total', '\$${order.total}',
-                                isBold: true),
-                          ],
+                        SizedBox(height: 2),
+                        Container(
+                          padding: EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            children: [
+                              Text('Delivery Information',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              //SizedBox(height: 16),
+                              _buildDeliveryInfo(),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 32),
-                      Container(
-                        padding: EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          children: [
-                            Text('Delivery Information',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                            SizedBox(height: 16),
-                            _buildDeliveryInfo(),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

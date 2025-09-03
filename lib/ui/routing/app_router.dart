@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kabir_admin_panel/core/models/item.dart';
-import 'package:kabir_admin_panel/core/models/order.dart';
 import 'package:kabir_admin_panel/ui/routing/404_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/foods/food_details_screen.dart';
+import 'package:kabir_admin_panel/ui/screens/items_details/items_details_screen.dart';
+import 'package:kabir_admin_panel/ui/screens/items/items.dart';
 import 'package:kabir_admin_panel/ui/screens/navigation/navigation_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/dashboard/dashboard_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/categories/categories_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/foods/foods_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/orders/order_details_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/orders/orders_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/push_notifications/push_notifications_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/messages/messages_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/administrators/administrators_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/riders/riders_screen.dart';
-import 'package:kabir_admin_panel/ui/screens/customers/customers_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/items_report/items_report_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/sales_report/sales_repor_screen.dart';
 import 'package:kabir_admin_panel/ui/screens/settings/settings_screen.dart';
@@ -40,31 +37,26 @@ final GoRouter appRouter = GoRouter(
               _professionalTransition(CategoriesScreen(), state),
         ),
         GoRoute(
-          path: '/foods',
+          path: '/item',
           pageBuilder: (context, state) =>
-              _professionalTransition(FoodScreen(), state),
+              _professionalTransition(ItemScreen(), state),
           routes: [
             GoRoute(
               path: '/edit',
               pageBuilder: (context, state) => _professionalTransition(
-                FoodDetailsScreen(item: state.extra as Item),
+                ItemDetailsScreen(item: state.extra as Item),
                 state,
               ),
             ),
             GoRoute(
               path: '/add',
               pageBuilder: (context, state) => _professionalTransition(
-                FoodDetailsScreen(),
+                ItemDetailsScreen(),
                 state,
               ),
             ),
           ],
         ),
-        // GoRoute(
-        //   path: '/addons',
-        //   pageBuilder: (context, state) =>
-        //       _professionalTransition(AddonsScreen(), state),
-        // ),
         GoRoute(
             path: '/online-orders',
             pageBuilder: (context, state) =>
@@ -79,29 +71,14 @@ final GoRouter appRouter = GoRouter(
               ),
             ]),
         GoRoute(
-          path: '/push-notifications',
-          pageBuilder: (context, state) =>
-              _professionalTransition(PushNotificationsScreen(), state),
-        ),
-        GoRoute(
           path: '/messages',
           pageBuilder: (context, state) =>
               _professionalTransition(MessagesScreen(), state),
         ),
         GoRoute(
-          path: '/administrators',
-          pageBuilder: (context, state) =>
-              _professionalTransition(AdministratorsScreen(), state),
-        ),
-        GoRoute(
           path: '/riders',
           pageBuilder: (context, state) =>
               _professionalTransition(RidersScreen(), state),
-        ),
-        GoRoute(
-          path: '/customers',
-          pageBuilder: (context, state) =>
-              _professionalTransition(CustomersScreen(), state),
         ),
         GoRoute(
           path: '/sales-report',

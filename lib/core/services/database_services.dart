@@ -266,4 +266,5 @@ class DatabaseServices {
   Future<void> deleteShipping(String id) async {
     await firestore.collection(shippingsCollection).doc(id).delete();
   }
+  
 }

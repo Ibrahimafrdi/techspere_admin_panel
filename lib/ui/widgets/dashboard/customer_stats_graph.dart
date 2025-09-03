@@ -1,14 +1,19 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:kabir_admin_panel/core/constants/decorations.dart';
 import 'package:kabir_admin_panel/core/extensions/style.dart';
+import 'package:kabir_admin_panel/ui/screens/dashboard/dashboard_provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CustomerStatsGraph extends StatelessWidget {
-  const CustomerStatsGraph({super.key});
+  final List<CustomerData> data;
+  
+  const CustomerStatsGraph({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
+    // Convert CustomerData to ChartData for the chart
+    final chartData = data.map((item) => ChartData(item.hour, item.count)).toList();
+
     return Container(
       decoration: primaryDecoration.copyWith(color: Colors.white),
       height: 400,
@@ -29,43 +34,43 @@ class CustomerStatsGraph extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: SfCartesianChart(
-                primaryYAxis: NumericAxis(isVisible: false),
-                plotAreaBorderWidth: 0,
-                primaryXAxis: CategoryAxis(
-                  tickPosition: TickPosition.outside,
-                  labelPlacement: LabelPlacement.betweenTicks,
-                  labelStyle: TextStyle(fontSize: 10),
-                  maximumLabels: 5,
-                  arrangeByIndex: true,
-                  majorGridLines: MajorGridLines(color: Colors.transparent),
-                ),
-                series: <CartesianSeries<ChartData, String>>[
-                  ColumnSeries<ChartData, String>(
-                    // borderColor: Color.fromARGB(255, 236, 151, 48),
-                    gradient: LinearGradient(
-                      colors: [
-                        Color.fromARGB(255, 255, 173, 72),
-                        Color.fromARGB(255, 255, 212, 160),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(7),
-                    ),
-                    dataSource: List.generate(
-                      24,
-                      (index) => ChartData(
-                        '${(index + 1).toString().padLeft(2, '0')}:00',
-                        Random().nextDouble() * 100,
+              child: data.isEmpty
+                  ? Center(
+                      child: 'No customer data available'.customText(
+                        color: Colors.grey,
+                        fontSize: 14,
                       ),
+                    )
+                  : SfCartesianChart(
+                      primaryYAxis: NumericAxis(isVisible: false),
+                      plotAreaBorderWidth: 0,
+                      primaryXAxis: CategoryAxis(
+                        tickPosition: TickPosition.outside,
+                        labelPlacement: LabelPlacement.betweenTicks,
+                        labelStyle: TextStyle(fontSize: 10),
+                        maximumLabels: 5,
+                        arrangeByIndex: true,
+                        majorGridLines: MajorGridLines(color: Colors.transparent),
+                      ),
+                      series: <CartesianSeries<ChartData, String>>[
+                        ColumnSeries<ChartData, String>(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 255, 173, 72),
+                              Color.fromARGB(255, 255, 212, 160),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(7),
+                          ),
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.hour,
+                          yValueMapper: (ChartData data, _) => data.y,
+                        )
+                      ],
                     ),
-                    xValueMapper: (ChartData data, _) => data.hour,
-                    yValueMapper: (ChartData data, _) => data.y,
-                  )
-                ],
-              ),
             ),
           ),
         ],
