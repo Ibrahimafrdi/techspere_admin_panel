@@ -1,9 +1,11 @@
+import 'package:go_router/go_router.dart';
 import 'package:kabir_admin_panel/core/constants/decorations.dart';
 import 'package:kabir_admin_panel/core/data_providers/addons_provider.dart';
 import 'package:kabir_admin_panel/core/models/action.dart';
 import 'package:kabir_admin_panel/core/models/variation.dart';
 import 'package:kabir_admin_panel/ui/routing/app_router.dart';
 import 'package:kabir_admin_panel/ui/screens/categories/category_edit_dialog.dart';
+import 'package:kabir_admin_panel/ui/widgets/common/add_or_edit_dialog.dart';
 import 'package:kabir_admin_panel/ui/widgets/common/data_grid/data_grid.dart';
 import 'package:web/web.dart' as web;
 import 'package:desktop_drop/desktop_drop.dart';
@@ -281,7 +283,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                 SizedBox(
                   width: 20,
                 ),
-                Expanded(child: AddonsContent(model)),
+                Expanded(child: technicalSpecs(model)),
               ],
             ),
             SizedBox(
@@ -729,105 +731,103 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     );
   }
 
-  Widget AddonsContent(FoodDetailsProvider model) {
-    return Consumer<AddonsProvider>(builder: (context, addonsProvider, _) {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: primaryDecoration.copyWith(color: Colors.white),
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          'Selected Addons'.customText(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black54,
-                          ),
-                          AddButton(
-                            text: 'Select Addons',
-                            onTap: () {
-                              // Show addon selection dialog
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text('Select Addons'),
+  Widget technicalSpecs(FoodDetailsProvider model) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: primaryDecoration.copyWith(color: Colors.white),
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        'Technical Specifications'.customText(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54,
+                        ),
+                        AddButton(
+                          text: 'Add New Spec',
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                String key = '';
+                                String value = '';
+                                return AddOrEditDialog(
+                                  title: 'Add New Specification',
                                   content: Container(
-                                    width: 500,
-                                    height: 400,
-                                    child: ListView.builder(
-                                      itemCount: addonsProvider.addons.length,
-                                      itemBuilder: (context, index) {
-                                        final addon =
-                                            addonsProvider.addons[index];
-                                        return CheckboxListTile(
-                                          title: Text(addon.name ?? ''),
-                                          value: model.selectedAddons
-                                              .contains(addon),
-                                          onChanged: (selected) {
-                                            if (selected!) {
-                                              model.addAddon(addon);
-                                            } else {
-                                              model.removeAddon(addon);
-                                            }
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextField(
+                                          decoration: InputDecoration(
+                                            labelText: 'Name',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          onChanged: (val) {
+                                            key = val;
                                           },
-                                        );
-                                      },
+                                        ),
+                                        SizedBox(height: 10),
+                                        TextField(
+                                          decoration: InputDecoration(
+                                            labelText: 'Value',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          onChanged: (val) {
+                                            value = val;
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text('Done'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                                  onSave: () {
+                                    model.addSpec({key: value});
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    ...List.generate(
+                      model.item.technicalSpecs.entries.length,
+                      (index) {
+                        final entry =
+                            model.item.technicalSpecs.entries.elementAt(index);
+                        return ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(entry.key),
+                              Text(entry.value),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: () {
+                              model.removeSpec(entry.key);
                             },
                           ),
-                          AddButton(
-                            text: 'Add New Addon',
-                            onTap: () {
-                              // showDialog(
-                              //   context: context,
-                              //   builder: (BuildContext context) {
-                              //     return AddonEditDialog();
-                              //   },
-                              // );
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      DataGrid(
-                        columnNames: ['name', 'price', 'action'],
-                        records: model.selectedAddons
-                            .map((addon) => [
-                                  addon.name,
-                                  addon.price,
-                                  [
-                                    ActionModel(
-                                      text: 'delete',
-                                      onTap: () => model.removeAddon(addon),
-                                    ),
-                                  ],
-                                ])
-                            .toList(),
-                      ),
-                    ],
-                  ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ],
-      );
-    });
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
